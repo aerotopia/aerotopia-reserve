@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeroTopia 사전예약</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        body {
+            background: #0d1117;
+            color: white;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 40px 20px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            width: 500px;
+            max-width: 95%;
+        }
+
+        .reserve-box {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 40px;
+        }
+
+        .reserve-box h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #58a6ff;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+        }
+
+        .reserve-btn {
+            width: 100%;
+            padding: 18px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 12px;
+            background: #238636;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .reserve-btn:hover {
+            background: #2ea043;
+        }
+
+        .count {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 28px;
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        .reward-title {
+            text-align: center;
+            font-size: 40px;
+            margin-bottom: 30px;
+            color: #58a6ff;
+        }
+
+        .reward-image {
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 3px solid #30363d;
+        }
+
+        .discord-btn {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 30px;
+            background: #5865F2;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .discord-btn:hover {
+            background: #4752c4;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #8b949e;
+            padding-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- 서버 로고 -->
+        <div class="logo">
+            <img src="logo.png" alt="AeroTopia">
+        </div>
+
+        <div class="reward-title">
+            🎁 사전예약 보상
+        </div>
+
+        <!-- 제1탄 -->
+        <img src="reward1.png" class="reward-image">
+
+        <!-- 제2탄 -->
+        <img src="reward2.png" class="reward-image">
+
+        <!-- 제3탄 -->
+        <img src="reward3.png" class="reward-image">
+
+        <!-- 사전예약 -->
+        <div class="reserve-box">
+
+            <h2>🚀 AeroTopia 사전예약</h2>
+
+            <div class="input-group">
+                <input type="text" id="nickname" placeholder="마인크래프트 닉네임">
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="discord" placeholder="디스코드 사용자명(필수)">
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="invite" placeholder="초대한 사람 닉네임(없으면 AVA 입력)">
+            </div>
+
+            <button class="reserve-btn" onclick="reserve()">
+                사전예약 신청하기
+            </button>
+
+            <div id="result"></div>
+
+            <div class="count">
+                현재 예약자 수 :
+                <span id="count">0</span>명
+            </div>
+
+        </div>
+
+        <a class="discord-btn" href="https://discord.gg/FGsPCsSQ4z" target="_blank">
+            🎮 디스코드 참여하기
+        </a>
+
+        <div class="footer">
+            © 2026 AeroTopia. All Rights Reserved.
+        </div>
+
+    </div>
+
+    <script>
+        const SCRIPT_URL =
+            "https://script.google.com/macros/s/AKfycbzK9PE52jPt2H4qh3_oYK72xo5cRHGW1IG3X2U6g15-z7KF9ceGUcfgLYUrm6Nv-2vV/exec";
+
+        async function reserve() {
+
+            const nickname =
+                document.getElementById("nickname").value.trim();
+
+            const discord =
+                document.getElementById("discord").value.trim();
+
+            const invite =
+                document.getElementById("invite").value.trim();
+
+            if (nickname === "") {
+                alert("마인크래프트 닉네임을 입력해주세요.");
+                return;
+            }
+
+            if (discord === "") {
+                alert("디스코드 사용자명을 입력해주세요.");
+                return;
+            }
+
+            try {
+
+                const response =
+                    await fetch(SCRIPT_URL, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            nickname: nickname,
+                            discord: discord,
+                            invite: invite
+                        })
+                    });
+
+                const data =
+                    await response.json();
+
+                if (!data.success) {
+                    alert(data.message);
+                    return;
+                }
+
+                document.getElementById("result").innerHTML =
+                    "<div style='margin-top:20px;color:#4ade80;font-size:20px;text-align:center;'>" +
+                    "✅ " + nickname + "님 사전예약 완료!<br>" +
+                    "디스코드 : " + discord + "<br>" +
+                    "추천인 : " + (invite || "AVA") +
+                    "</div>";
+
+                document.getElementById("nickname").value = "";
+                document.getElementById("discord").value = "";
+                document.getElementById("invite").value = "";
+
+                loadCount();
+
+            } catch (error) {
+
+                console.log(error);
+                alert("서버 연결 실패");
+
+            }
+
+        }
+
+        async function loadCount() {
+
+            try {
+
+                const response =
+                    await fetch(SCRIPT_URL);
+
+                const data =
+                    await response.json();
+
+                if (data.count !== undefined) {
+
+                    document.getElementById("count").innerText =
+                        data.count;
+
+                }
+
+            } catch (error) {
+
+                console.log(error);
+
+            }
+
+        }
+
+        loadCount();
+
+    </script>
+
+</body>
+</html>
